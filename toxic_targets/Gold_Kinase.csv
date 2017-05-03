@@ -1,0 +1,86 @@
+"","id","name","tdl","idgfam","y"
+"649",649,"Atrial natriuretic peptide receptor 1","Tclin","Kinase",1
+"862",862,"ALK tyrosine kinase receptor","Tclin","Kinase",1
+"1636",1636,"Serine/threonine-protein kinase B-raf","Tclin","Kinase",1
+"1816",1816,"Tyrosine-protein kinase BTK","Tclin","Kinase",1
+"2647",2647,"Cyclin-dependent kinase 6","Tclin","Kinase",1
+"2736",2736,"Cyclin-dependent kinase 9","Tclin","Kinase",1
+"3788",3788,"Macrophage colony-stimulating factor 1 receptor","Tclin","Kinase",1
+"5473",5473,"Ephrin type-A receptor 2","Tclin","Kinase",1
+"5615",5615,"Receptor tyrosine-protein kinase erbB-4","Tclin","Kinase",1
+"6005",6005,"Fibroblast growth factor receptor 4","Tclin","Kinase",1
+"6047",6047,"Fibroblast growth factor receptor 2","Tclin","Kinase",1
+"6105",6105,"Fibroblast growth factor receptor 1","Tclin","Kinase",1
+"6163",6163,"Receptor-type tyrosine-protein kinase FLT3","Tclin","Kinase",1
+"6240",6240,"Fibroblast growth factor receptor 3","Tclin","Kinase",1
+"7304",7304,"Heat-stable enterotoxin receptor","Tclin","Kinase",1
+"7421",7421,"Tyrosine-protein kinase HCK","Tclin","Kinase",1
+"8195",8195,"Tyrosine-protein kinase ITK/TSK","Tclin","Kinase",1
+"8274",8274,"Insulin receptor","Tclin","Kinase",1
+"8405",8405,"Tyrosine-protein kinase JAK1","Tclin","Kinase",1
+"8406",8406,"Tyrosine-protein kinase JAK2","Tclin","Kinase",1
+"8647",8647,"Mast/stem cell growth factor receptor Kit","Tclin","Kinase",1
+"8802",8802,"Protein kinase C beta type","Tclin","Kinase",1
+"10123",10123,"Hepatocyte growth factor receptor","Tclin","Kinase",1
+"12835",12835,"Platelet-derived growth factor receptor beta","Tclin","Kinase",1
+"13015",13015,"Platelet-derived growth factor receptor alpha","Tclin","Kinase",1
+"13083",13083,"Phosphatidylinositol 4,5-bisphosphate 3-kinase catalytic subunit delta isoform","Tclin","Kinase",1
+"13990",13990,"RAF proto-oncogene serine/threonine-protein kinase","Tclin","Kinase",1
+"14419",14419,"Proto-oncogene tyrosine-protein kinase receptor Ret","Tclin","Kinase",1
+"14836",14836,"Rho-associated protein kinase 1","Tclin","Kinase",1
+"14865",14865,"Rho-associated protein kinase 2","Tclin","Kinase",1
+"18283",18283,"Non-receptor tyrosine-protein kinase TYK2","Tclin","Kinase",1
+"18755",18755,"Vascular endothelial growth factor receptor 1","Tclin","Kinase",1
+"18756",18756,"Vascular endothelial growth factor receptor 3","Tclin","Kinase",1
+"18810",18810,"Vascular endothelial growth factor receptor 2","Tclin","Kinase",1
+"1",12586,"3-phosphoinositide-dependent protein kinase 1","Tchem","Kinase",0
+"2",382,"5'-AMP-activated protein kinase catalytic subunit alpha-1","Tchem","Kinase",0
+"3",17296,"Angiopoietin-1 receptor","Tclin","Kinase",0
+"4",8766,"Calcium/calmodulin-dependent protein kinase type IV","Tbio","Kinase",0
+"5",8424,"cAMP-dependent protein kinase catalytic subunit alpha","Tchem","Kinase",0
+"6",2646,"Cyclin-dependent kinase 1","Tchem","Kinase",0
+"7",2470,"Cyclin-dependent kinase 2","Tchem","Kinase",0
+"8",2563,"Cyclin-dependent kinase 4","Tclin","Kinase",0
+"9",1871,"Cytoplasmic tyrosine-protein kinase BMX","Tchem","Kinase",0
+"10",4416,"Death-associated protein kinase 1","Tchem","Kinase",0
+"11",10590,"Dual specificity mitogen-activated protein kinase kinase 1","Tclin","Kinase",0
+"12",10408,"Dual specificity mitogen-activated protein kinase kinase 2","Tclin","Kinase",0
+"13",2975,"Dual specificity protein kinase CLK2","Tchem","Kinase",0
+"14",2976,"Dual specificity protein kinase CLK4","Tchem","Kinase",0
+"15",5008,"Dual specificity tyrosine-phosphorylation-regulated kinase 1A","Tchem","Kinase",0
+"16",5330,"Epidermal growth factor receptor","Tclin","Kinase",0
+"17",5763,"Focal adhesion kinase 1","Tchem","Kinase",0
+"18",7191,"Glycogen synthase kinase-3 alpha","Tclin","Kinase",0
+"19",7081,"Glycogen synthase kinase-3 beta","Tclin","Kinase",0
+"20",11606,"High affinity nerve growth factor receptor","Tchem","Kinase",0
+"21",7862,"Inhibitor of nuclear factor kappa-B kinase subunit alpha","Tchem","Kinase",0
+"22",8014,"Inhibitor of nuclear factor kappa-B kinase subunit beta","Tchem","Kinase",0
+"23",7853,"Insulin-like growth factor 1 receptor","Tclin","Kinase",0
+"24",8219,"Integrin-linked protein kinase","Tbio","Kinase",0
+"25",8458,"Interleukin-1 receptor-associated kinase 1","Tchem","Kinase",0
+"26",9869,"MAP kinase-activated protein kinase 5","Tchem","Kinase",0
+"27",10425,"Mitogen-activated protein kinase 1","Tchem","Kinase",0
+"28",10395,"Mitogen-activated protein kinase 3","Tchem","Kinase",0
+"29",10396,"Mitogen-activated protein kinase 8","Tchem","Kinase",0
+"30",10426,"Mitogen-activated protein kinase 9","Tchem","Kinase",0
+"31",10030,"Mitogen-activated protein kinase kinase kinase 5","Tchem","Kinase",0
+"32",13082,"Phosphatidylinositol 3-kinase catalytic subunit type 3","Tchem","Kinase",0
+"33",9302,"Protein kinase C delta type","Tclin","Kinase",0
+"34",8733,"Protein kinase C epsilon type","Tchem","Kinase",0
+"35",9303,"Protein kinase C theta type","Tchem","Kinase",0
+"36",16430,"Proto-oncogene tyrosine-protein kinase Src","Tclin","Kinase",0
+"37",572,"RAC-alpha serine/threonine-protein kinase","Tchem","Kinase",0
+"38",5614,"Receptor tyrosine-protein kinase erbB-2","Tclin","Kinase",0
+"39",8960,"Ribosomal protein S6 kinase beta-1","Tchem","Kinase",0
+"40",1283,"Serine-protein kinase ATM","Tchem","Kinase",0
+"41",1354,"Serine/threonine-protein kinase ATR","Tchem","Kinase",0
+"42",2850,"Serine/threonine-protein kinase Chk1","Tchem","Kinase",0
+"43",10620,"Serine/threonine-protein kinase mTOR","Tclin","Kinase",0
+"44",13123,"Serine/threonine-protein kinase pim-1","Tchem","Kinase",0
+"45",8785,"Thymidine kinase 2, mitochondrial","Tchem","Kinase",0
+"46",232,"Tyrosine-protein kinase ABL1","Tclin","Kinase",0
+"47",6571,"Tyrosine-protein kinase Fyn","Tclin","Kinase",0
+"48",8299,"Tyrosine-protein kinase JAK3","Tclin","Kinase",0
+"49",9243,"Tyrosine-protein kinase Lck","Tclin","Kinase",0
+"50",9707,"Tyrosine-protein kinase Lyn","Tclin","Kinase",0
+"51",19221,"Tyrosine-protein kinase Yes","Tclin","Kinase",0

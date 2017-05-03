@@ -29,10 +29,17 @@ library(randomForest)
 library(caret)
 
 combined_IC_GPCR_results_reduced_train$y<-as.factor(combined_IC_GPCR_results_reduced_train$y)
-model <- naiveBayes(y~.,data=combined_IC_GPCR_results_reduced_train)
-# model<-randomForest(y~.,data=combined_IC_GPCR_results_reduced_train)
+# model <- naiveBayes(y~.,data=combined_IC_GPCR_results_reduced_train)
+model<-randomForest(y~.,data=combined_IC_GPCR_results_reduced_train)
 pred <- predict(model,combined_IC_GPCR_results_reduced_test[,c(-which(colnames(combined_IC_GPCR_results_reduced_test)=="y"))])
 table(pred, combined_IC_GPCR_results_reduced_test$y)
+
+## For randomForest
+importance <- varImp(model, scale=FALSE)
+# summarize importance
+print(importance)
+# plot importance
+plot(importance)
 
 ###########################
 # GLMNET
@@ -55,12 +62,7 @@ fit.lasso.cv<-cv.glmnet(x,
                      type.measure = "class")
 plot(fit.lasso, xvar="lambda")
 fit.lasso$lambda.min
-### For randomForest
-# importance <- varImp(model, scale=FALSE)
-# # summarize importance
-# print(importance)
-# # plot importance
-# plot(importance)
+
 glm_test_data<-as.matrix(data.frame(combined_IC_GPCR_results_reduced_test[,c(-which(colnames(combined_IC_GPCR_results_reduced_test)=="y"))]))
 pred<-predict(cv.glmmod,newx=glm_test_data,x="lambda.min",type="class")
 table(pred, combined_IC_GPCR_results_reduced_test$y)
