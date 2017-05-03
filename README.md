@@ -1,3 +1,4 @@
 # tcrd-similar-targets
 
-Utilizing TCRD database (used by Pharos) to find druggable target kinases. 
+Utilizing TCRD database (used by Pharos) to predict drug targets associated with drugs with poor safety profiles.
+
