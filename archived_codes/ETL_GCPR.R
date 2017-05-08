@@ -1,0 +1,164 @@
+library(RMySQL)
+library(dplyr)
+
+mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
+
+GCPR_ids<-dbSendQuery(mydb,'SELECT id from target where idgfam="GPCR";')
+GCPR_ids<-fetch(GCPR_ids, n=-1)
+GCPR_ids<-GCPR_ids$id
+
+result<-data.frame()
+
+dbSendQuery(mydb,
+            'CREATE TEMPORARY TABLE gcpr (id int) as (SELECT id from target where idgfam="GPCR");')
+
+gcpr_tdl_labels_query<-dbSendQuery(mydb,
+                              'SELECT tdl from target where id IN (select id from gcpr);')
+
+gcpr_tdl_labels = fetch(gcpr_tdl_labels_query, n=-1)
+
+query_all<-function(kinase_ids){
+  for(id in kinase_ids){
+    query<-dbSendQuery(mydb,sprintf(
+      'SELECT CONCAT("chembl_activity","_",cmpd_chemblid,"_",act_type) AS results
+      FROM chembl_activity as results
+      WHERE target_id=%s
+      
+      UNION
+      
+      SELECT DISTINCT(CONCAT("drug_activity","_",REPLACE(go_term," ","_"))) AS results
+      FROM compartment 
+      WHERE protein_id=%s
+      
+      UNION
+      
+      SELECT 
+      CONCAT(
+      "expression_",
+      Replace(tissue," ","_"),
+      "_",
+      Replace(qual_value," ","_")
+      ) AS expression
+      FROM expression 
+      WHERE protein_id=%s 
+      AND etype="HPM Protein"
+      GROUP BY tissue	
+      
+      UNION
+      
+      #SELECT (CONCAT("generif_pubmed","_",pubmed_ids))
+      #FROM generif 
+      #WHERE protein_id=%s
+      
+      #UNION
+      
+      
+      #SELECT REPLACE(CONCAT("gene_attribute","_",REPLACE(gene_attribute.name,CONCAT("/",gene_attribute_type.name),""))," ","_") as results
+      #FROM gene_attribute
+      #JOIN gene_attribute_type ON gene_attribute_type.id=gene_attribute.gat_id 
+      #WHERE 
+      #gat_id=103 AND 
+      #protein_id=%s
+      
+      #UNION
+      
+      SELECT CONCAT("panther_class_id_",pcid) AS results 
+      FROM panther_class 
+      WHERE ID IN (SELECT panther_class_id from p2pc WHERE protein_id="%s")
+      
+      UNION
+      
+      SELECT (CONCAT("pathway","_",pwtype,"_",id_in_source)) as results
+      FROM pathway 
+      WHERE protein_id=%s AND pwtype="Reactome"
+      
+      UNION
+      
+      SELECT (CONCAT("phenotype","_",REPLACE(term_id,":","_"))) as results
+      FROM phenotype 
+      WHERE protein_id=%s AND ptype="JAX/MGI Human Ortholog Phenotype"
+      
+      UNION
+      
+      SELECT CONCAT("ppi","_",(
+      CASE 
+      WHEN protein1_id = %s THEN protein2_id 
+      ELSE protein1_id END)) AS ppi_protein_id
+      FROM ppi WHERE protein1_id=%s OR protein2_id=%s
+      
+      UNION
+      
+      
+      SELECT CONCAT("target2disease","_",REPLACE(name," ","_")) as target2disease_id
+      FROM target2disease
+      WHERE target_id=%s;
+      ',id,id,id,id,id,id,id,id,id,id,id,id))
+    
+    data = fetch(query, n=-1)
+    all_variables<-append(data$result,names(result))
+    print(length(all_variables))
+    print(id)
+    row<-data.frame(as.list(setNames(c(ifelse(all_variables %in% data$results,1,0)),
+                                     all_variables)))
+    result<-bind_rows(result,row)
+    
+  }
+  return(result)
+}
+
+gcpr_1_30<-query_all(GCPR_ids[1:30])
+gcpr_31_60<-query_all(GCPR_ids[31:60])
+gcpr_61_90<-query_all(GCPR_ids[61:90])
+gcpr_91_120<-query_all(GCPR_ids[91:120])
+gcpr_121_150<-query_all(GCPR_ids[121:150])
+gcpr_151_180<-query_all(GCPR_ids[151:180])
+gcpr_181_210<-query_all(GCPR_ids[181:210])
+gcpr_211_240<-query_all(GCPR_ids[211:240])
+gcpr_241_270<-query_all(GCPR_ids[241:270])
+gcpr_271_300<-query_all(GCPR_ids[271:300])
+gcpr_301_330<-query_all(GCPR_ids[301:330])
+gcpr_331_360<-query_all(GCPR_ids[331:360])
+gcpr_361_390<-query_all(GCPR_ids[361:390])
+gcpr_391_406<-query_all(GCPR_ids[391:406])
+
+gcpr_results<-bind_rows(gcpr_1_30,gcpr_31_60)
+gcpr_results<-bind_rows(gcpr_results,gcpr_61_90)
+gcpr_results<-bind_rows(gcpr_results,gcpr_91_120)
+gcpr_results<-bind_rows(gcpr_results,gcpr_121_150)
+gcpr_results<-bind_rows(gcpr_results,gcpr_151_180)
+gcpr_results<-bind_rows(gcpr_results,gcpr_181_210)
+gcpr_results<-bind_rows(gcpr_results,gcpr_211_240)
+gcpr_results<-bind_rows(gcpr_results,gcpr_241_270)
+gcpr_results<-bind_rows(gcpr_results,gcpr_271_300)
+gcpr_results<-bind_rows(gcpr_results,gcpr_301_330)
+gcpr_results<-bind_rows(gcpr_results,gcpr_331_360)
+gcpr_results<-bind_rows(gcpr_results,gcpr_361_390)
+gcpr_results<-bind_rows(gcpr_results,gcpr_391_406)
+
+gcpr_results$target_id<-unlist(GCPR_ids)
+gcpr_results$tdl_class<-unlist(gcpr_tdl_labels)
+gcpr_results[is.na(gcpr_results)]<-0
+write.csv(gcpr_results,"gcpr_results.csv")
+
+### Now for real
+
+gold_GPCR<-read.csv('toxic_targets/Gold_GPCR.csv')
+which(colnames(gcpr_results)=="tdl_class")
+gpcr_results_reduced<-gcpr_results[,c(-68524)]
+gpcr_results_reduced<-gpcr_results_reduced %>% filter(target_id %in% gold_GPCR$id)
+temp<-gpcr_results_reduced[,colSums(gpcr_results_reduced) > 10]
+temp<-merge(temp,gold_GPCR[,c('id','y')],by.x='target_id',by.y='id')
+temp<-temp[,c(-1)]
+library(caTools)
+spl<-sample.split(temp$y,SplitRatio = 0.8)
+gpcr_results_reduced_train<-temp[spl,]
+gpcr_results_reduced_test<-temp[!spl,]
+
+# Make sure we got rid of class
+
+gpcr_results_reduced_train$y<-as.factor(gpcr_results_reduced_train$y)
+model <- naiveBayes(y~.,data=gpcr_results_reduced_train)
+# model<-glmnet(IC_results_reduced_train,y)
+pred <- predict(model,gpcr_results_reduced_test[,c(-which(colnames(gpcr_results_reduced_test)=="y"))])
+table(pred, gpcr_results_reduced_test$y)
+
