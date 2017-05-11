@@ -1,4 +1,4 @@
-temp_predict_all<-predict(model,all_tcrd)
+temp_predict_all<-predict(model,bah)
 
 target_adverse<-data.frame(target_id=all_tcrd$target_id,
              adverse=unlist(temp_predict_all))
