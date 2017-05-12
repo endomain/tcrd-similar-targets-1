@@ -15,19 +15,19 @@ This code queries each druggable target + additional targets identified via WITH
 ------------
 
 ## Step2: Feature selection 
-# DataMappingColsums.R
+### DataMappingColsums.R
 The file contains code for feature reduction. Since a large number of features contained zeros, we first removed the columns with less than 20 non-zero values (out of 1129 samples). 
 
-# FeatureSelection.ipynb
+### FeatureSelection.ipynb
 This file contains code for feature selection codes (in python). 
 We applied chi-square feature selection and filered out features with chi-square p-values of <0.05
 
 ------------
 
 ## Step3 Predictive modeling of drug targets
-# Combined_analysis.R
+### Combined_analysis.R
 The files contains the modeling codes for L1-Logistic Regression (5-fold CV), Naive Bayes, Random Forrest based on cross validation.  
-# SVM.R
+### SVM.R
 The file contains the modeling code for Support Vector Machine (Linear and Kernel). 
 
 ------------
