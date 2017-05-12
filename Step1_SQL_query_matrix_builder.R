@@ -29,7 +29,7 @@ IC_tdl_labels_query<-dbSendQuery(mydb,
                                  'SELECT tdl from target where id IN (select id from ion_channel);')
 IC_tdl_labels = fetch(IC_tdl_labels_query, n=-1)
 
-# Get all GPCR ids
+# Get all GPCR ids and labels
 dbSendQuery(mydb,
             'CREATE TEMPORARY TABLE gcpr (id int) as (SELECT id from target where idgfam="GPCR");')
 GPCR_ids<-dbSendQuery(mydb,'SELECT id from target where idgfam="GPCR";')
@@ -40,13 +40,13 @@ GPCR_tdl_labels_query<-dbSendQuery(mydb,
 
 GPCR_tdl_labels = fetch(GPCR_tdl_labels_query, n=-1)
 
-# Get all idfgam=NULL ids
+# Get all idfgam=NULL ids and TDL labels
 dbSendQuery(mydb,
             'CREATE TEMPORARY TABLE null_idg (id int) as (SELECT id from target where idgfam IS NULL);')
 null_ids<-dbSendQuery(mydb,'SELECT id from target where idgfam IS NULL;')
 null_ids<-fetch(null_ids, n=-1)
 null_ids<-null_ids$id
-# for the sake of querying. get only gold standard IDS for null
+# Get only gold standard IDS
 null_ids<-null_ids[null_ids %in% all_gold$id]
 null_tdl_labels_query<-dbSendQuery(mydb,
                                    'SELECT id,tdl from target where id IN (select id from null_idg);')
@@ -54,14 +54,13 @@ null_tdl_labels_query<-dbSendQuery(mydb,
 null_tdl_labels = fetch(null_tdl_labels_query, n=-1)
 null_tdl_labels<-null_tdl_labels %>% filter(id %in% null_ids)
 
-# Get all idfgam=NULL ids
+# Get all idfgam=NR and TDL labels
 dbSendQuery(mydb,
             'CREATE TEMPORARY TABLE nr (id int) as (SELECT id from target where idgfam ="NR");')
 nr_ids<-dbSendQuery(mydb,'SELECT id from target where idgfam ="NR";')
 nr_ids<-fetch(nr_ids, n=-1)
 nr_ids<-nr_ids$id
-
-# for the sake of querying. get only gold standard IDS for NR
+# Get only gold standard IDS
 nr_ids<-nr_ids[nr_ids %in% all_gold$id]
 nr_tdl_labels_query<-dbSendQuery(mydb,
                                    'SELECT id,tdl from target where id IN (select id from nr);')
@@ -163,6 +162,15 @@ query_all<-function(kinase_ids){
   }
   return(result)
 }
+
+
+########################################################################
+# Ugly coding, but had to to this to get around R memory limits and speed 
+# issues related to querying and expanding each feature.
+########################################################################
+# Query and Bind KINASES
+########################################################################
+
 final_result1_30<-query_all(kinase_ids[1:30])
 final_result31_60<-query_all(kinase_ids[31:60])
 final_result61_90<-query_all(kinase_ids[61:90])
@@ -203,7 +211,9 @@ kinase_results<-bind_rows(kinase_results,final_result491_520)
 kinase_results<-bind_rows(kinase_results,final_result521_540)
 kinase_results<-bind_rows(kinase_results,final_result541_578)
 
-
+########################################################################
+# Query and Bind GPC receptors
+########################################################################
 gcpr_1_30<-query_all(GPCR_ids[1:30])
 gcpr_31_60<-query_all(GPCR_ids[31:60])
 gcpr_61_90<-query_all(GPCR_ids[61:90])
@@ -234,7 +244,9 @@ gcpr_results<-bind_rows(gcpr_results,gcpr_91_120)
 gcpr_results<-bind_rows(gcpr_results,gcpr_271_300)
 gcpr_results<-bind_rows(gcpr_results,gcpr_1_30)
 
-
+########################################################################
+# Query and row bind Ion channels
+########################################################################
 IC_1_30<-query_all(IC_ids[1:30])
 IC_31_60<-query_all(IC_ids[31:60])
 IC_61_90<-query_all(IC_ids[61:90])
@@ -260,7 +272,9 @@ IC_results<-bind_rows(IC_results,IC_271_300)
 IC_results<-bind_rows(IC_results,IC_301_330)
 IC_results<-bind_rows(IC_results,IC_331_342)
 
-
+########################################################################
+# Query and row bind IDG family = NULL
+########################################################################
 null_1_30<-query_all(null_ids[1:30])
 null_31_60<-query_all(null_ids[31:60])
 null_61_90<-query_all(null_ids[61:90])
@@ -314,13 +328,17 @@ null_results<-bind_rows(null_results,null_691_720)
 null_results<-bind_rows(null_results,null_721_750)
 null_results<-bind_rows(null_results,null_751_763)
 
+########################################################################
+# Query and row bind IDG family = NR
+########################################################################
+
 nr_1_28<-query_all(nr_ids[1:28])
 nr_results<-nr_1_28
 
-######################################################
-# Add appropriate Labels for each class,
-# in the right order of the queries 
-######################################################
+########################################################################
+# Add appropriate target_ids and labels.
+# *** In the right order of the queries - especially for GPCR
+########################################################################
 
 null_results$target_id<-unlist(null_ids)
 null_results$tdl<-unlist(null_tdl_labels$tdl)
@@ -331,8 +349,10 @@ nr_results$tdl<-unlist(nr_tdl_labels$tdl)
 kinase_results$target_id<-unlist(kinase_ids)
 kinase_results$tdl<-unlist(kinase_tdl_labels)
 
-# caveat for above optimization for bind_rows 
-# is that it messed up the original ID order.
+########################################################################
+# caveat for above optimization for bind_rows for GPCR is that
+# is that it messed up the original target_id label order.
+########################################################################
 gcpr_results$target_id<-unlist(c(GPCR_ids[31:60],
                                  GPCR_ids[61:90],
                                  GPCR_ids[121:150],
@@ -370,14 +390,17 @@ IC_results$target_id<-unlist(IC_ids)
 IC_results$tdl<-unlist(IC_tdl_labels)
 
 ######################################################
-# Combine all three into one giant data frame
+# Combine all 5 classes/non-classes into one giant data frame:
+#
+# `all_tcrd`
+#
 ######################################################
+
 Rprof ( tf <- "log.log",  memory.profiling = TRUE )
 all_tcrd<-bind_rows(kinase_results,gcpr_results)
 all_tcrd<-bind_rows(all_tcrd,IC_results)
 all_tcrd<-bind_rows(all_tcrd,nr_results)
 all_tcrd<-bind_rows(all_tcrd,null_results)
-
 Rprof ( NULL ) ; print ( summaryRprof ( tf )  )
 
 
@@ -389,6 +412,11 @@ Rprof ( NULL ) ; print ( summaryRprof ( tf )  )
 ######################################################
 Rprof ( tf <- "log.log",  memory.profiling = TRUE )
 
+
+######################################################
+# R memory limit forces us to fragment this process
+# as well.
+######################################################
 all_tcrd_1_300<-all_tcrd[1:300,]
 all_tcrd_301_600<-all_tcrd[301:600,]
 all_tcrd_601_900<-all_tcrd[601:900,]
