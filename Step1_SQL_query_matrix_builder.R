@@ -419,9 +419,16 @@ all_tcrd_1801_2000<-all_tcrd[1801:2000,]
 all_tcrd_2001_2117<-all_tcrd[2001:2117,]
 
 zeroer<-function(df){
+  # Temporary store categorical variable like TDL
+  
+  temp_tdls<-unlist(df$tdl)
+  
   mat<-data.matrix(df)
   mat[is.na(mat)]<-0
   df<-data.frame(mat)
+  # Reattach target_ids and tdl
+  
+  df$tdl<-temp_tdls
   return(df)
 }
 
