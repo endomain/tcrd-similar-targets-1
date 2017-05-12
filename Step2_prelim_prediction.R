@@ -27,23 +27,28 @@ get_minimum_colSum_cols<-function(df,min){
   }
   return(result)
 }
-col_to_keep<-get_minimum_colSum_cols(all_tcrd_reduced,100)
+col_to_keep<-get_minimum_colSum_cols(all_tcrd_reduced,20)
 temp<-all_tcrd_reduced[,col_to_keep]
+
 ######################################################
 # exclude certain features from tables for Experimentation
 # ######################################################
 # temp<-temp[,!grepl("expression",colnames(temp))]
 
 temp$target_id<-unlist(all_tcrd_reduced_target_id)
-write.csv(temp,"audit.csv")
 ######################################################
 # Merge our gold standards list
 ######################################################
+
 temp<-merge(temp,all_gold[,c('id','tdl','idgfam','y')],by.x='target_id',by.y='id')
+
 ######################################################
 # Exclude the target_id column for training our data
 ######################################################
+
 temp<-temp[,c(-1)]
+
+
 ######################################################
 # Split the sample at even proportions using our 'y'
 # which indicates target's association with a withdrawn drug

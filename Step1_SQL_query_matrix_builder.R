@@ -496,7 +496,9 @@ nr_ids,
 null_ids)
 
 all_tcrd_reduced<-all_tcrd[,-c(which(colnames(all_tcrd)=="tdl"))]
+
 # Select for training sets, based on our manually minined gold standard list
-# 
+# This is our "training/testing" set
+
 all_tcrd_reduced<-all_tcrd_reduced[all_tcrd_reduced$target_id %in% all_gold$id,]
 all_tcrd_reduced_target_id<-unlist(all_tcrd_reduced$target_id)

@@ -8,19 +8,23 @@
 
 ------------
 
-## Step1_SQL_query_matrix_builder.R 
+## Step1: SQL Query, Vector represention of targets, and Working Matrix
+
+`Step1_SQL_query_matrix_builder.R`
 
 This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. It expands the feature set with each new target vector representation added. 
 
 ------------
 
 ## Step2: Feature selection 
-### DataMappingColsums.R
+### `analysis_code/DataMappingColsums.R`
 The file contains code for feature reduction. Since a large number of features contained zeros, we first removed the columns with less than 20 non-zero values (out of 1129 samples). 
 
-### FeatureSelection.ipynb
+### `analysis_code/FeatureSelection.ipynb`
 This file contains code for feature selection codes (in python). 
 We applied chi-square feature selection and filered out features with chi-square p-values of <0.05
+
+Note `Step2_prelim_prediction` is used for prelim `randomForest` model in R.
 
 ------------
 
