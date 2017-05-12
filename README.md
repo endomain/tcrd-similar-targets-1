@@ -6,7 +6,9 @@
 
 ## Compiled Data Set:
 
-`
+#### `all_tcrd.Rda`
+
+R workspace file, containing `all_tcrd` data frame for our analysis. This data frame can be generated from `Step1_SQL_query_matrix_builder.R` file on any computer with a local instance of Pharos/TCRD database installed on MySQL. SQL data dump is available from:  (http://juniper.health.unm.edu/tcrd/download/tcrd_v4.4.2.sql.gz)
 
 ------------
 
