@@ -1,3 +1,11 @@
+######################################################
+# This file is a crude 'preview' run of a basic
+# prediction model.
+#
+# The actual analysis is done in Python,
+# in folder `analysis_code/`
+######################################################
+
 library(caTools)
 library(e1071)
 library(randomForest)
@@ -10,7 +18,7 @@ library(caret)
 get_minimum_colSum_cols<-function(df,min){
   result<-as.vector(0)
   for(col_num in 1:length(df)){
-    if(sum(df[,col_num])>=min){
+    if(sum(df[,col_num])>=min & sum(df[,col_num])<500){
       result <- c(result, col_num)
     }
     if(col_num %% 2000 == 0){
@@ -19,7 +27,7 @@ get_minimum_colSum_cols<-function(df,min){
   }
   return(result)
 }
-col_to_keep<-get_minimum_colSum_cols(all_tcrd_reduced,20)
+col_to_keep<-get_minimum_colSum_cols(all_tcrd_reduced,100)
 temp<-all_tcrd_reduced[,col_to_keep]
 ######################################################
 # exclude certain features for Experimentation

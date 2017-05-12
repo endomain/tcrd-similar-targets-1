@@ -17,12 +17,12 @@ data_viz_df$predict<-predict(model,data_viz_df)
 table(data_viz_df$predict,data_viz_df$tdl)
 table(data_viz_df$predict,data_viz_df$idgfam)
 
-cols_to_subtract<-c(which(colnames(data_viz_df)=="target_id"),
-                    which(colnames(data_viz_df)=="tdl"),
-                    which(colnames(data_viz_df)=="idgfam"),
-                    which(colnames(data_viz_df)=="predict"))
-
-data_viz_df<-data_viz_df[,-cols_to_subtract]
+# cols_to_subtract<-c(which(colnames(data_viz_df)=="target_id"),
+#                     which(colnames(data_viz_df)=="tdl"),
+#                     which(colnames(data_viz_df)=="idgfam"),
+#                     which(colnames(data_viz_df)=="predict"))
+# 
+# data_viz_df<-data_viz_df[,-cols_to_subtract]
 data_viz_df<-data_viz_df[,get_colSums(data_viz_df,20)]
 heatmap_mat<-data.matrix(data_viz_df)
 
@@ -32,7 +32,7 @@ idgfam_annotation<-data.frame(idgfam=data_viz_df[data_viz_df$target_id == as.num
                               tdl=data_viz_df[data_viz_df$target_id == as.numeric(rownames(heatmap_mat))]$tdl,
                               predict=data_viz_df[data_viz_df$target_id == as.numeric(rownames(heatmap_mat))]$predict)
 
-pdf("heatmap.pdf",width=40,height=50)
+pdf("heatmap.pdf",width=40,height=70)
 
 # ha1 = HeatmapAnnotation(df = df,
 #                         col = list(type = c("a" = "red", "b" = "blue"),
@@ -53,9 +53,9 @@ h1<-Heatmap(heatmap_mat, km=12,
 #                    col = list(idgfam = c("IC" = "red", 
 #                                        "GPCR" = "blue", 
 # #                                        "Kinase"="green")))
-# ha2 = rowAnnotation(df = idgfam_annotation, 
-#                     col = list(predict = c("1"="blue",
-#                                            "0"="white")))
+ha2 = rowAnnotation(df = idgfam_annotation,
+                    col = list(predict = c("1"="blue",
+                                           "-1"="red")))
 # 
 # ha2 = rowAnnotation(df = idgfam_annotation, 
 #                    col = list(tdl = c("Tclin" = "green", 

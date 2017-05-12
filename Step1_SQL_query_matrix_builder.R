@@ -453,14 +453,7 @@ Rprof ( NULL ) ; print ( summaryRprof ( tf )  )
 # Combine all the gold standards, extracted from
 # WITHDARWN database.
 ######################################################
-# gold_GPCR<-read.csv('toxic_targets/Gold_GPCR.csv')
-# gold_Kinase<-read.csv('toxic_targets/gold_Kinase.csv')
-# gold_IC<-read.csv('toxic_targets/gold_IC.csv')
-
 all_gold<-read.csv('toxic_targets/GoldStandards.csv')
-# all_gold<-bind_rows(gold_IC,gold_GPCR)
-# Kinase csv has an extra row
-# all_gold<-bind_rows(all_gold,gold_Kinase[,c(-1)])
 
 
 ######################################################
@@ -470,10 +463,10 @@ all_gold<-read.csv('toxic_targets/GoldStandards.csv')
 all_tcrd$target_id<-c(kinase_ids,unlist(c(GPCR_ids[31:60],
                                           GPCR_ids[61:90],
                                           GPCR_ids[121:150],
+                                          GPCR_ids[151:180],
                                           GPCR_ids[181:210],
                                           GPCR_ids[211:240],
                                           GPCR_ids[241:270],
-                                          GPCR_ids[271:300],
                                           GPCR_ids[301:330],
                                           GPCR_ids[331:360],
                                           GPCR_ids[361:390],
