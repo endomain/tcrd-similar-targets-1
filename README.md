@@ -1,29 +1,29 @@
 ## tcrd-similar-targets
 
-Jing Ai and Jung Hoon Son
+*Jing Ai* and *Jung Hoon Son*
 
-Utilizing TCRD database (used by Pharos) to predict drug targets associated with poor safety profiles of drugs. 
+**Utilizing TCRD database (used by Pharos) to predict drug targets associated with poor safety profiles of drugs. **
 
 ## Code Description:
 
 ------------
 
-#### Step1_SQL_query_matrix_builder.R 
+## Step1_SQL_query_matrix_builder.R 
 
 This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. 
 
-It expands the feature set with each new vector added. It likely needs optimization, but for our purposes we ran it rarely. 
+It expands the feature set with each new target vector representation added. It likely needs optimization, but for our purposes we ran it rarely. 
 
 ------------
 
-#### Step2_prelim_prediction.R
+## Step2_prelim_prediction.R
 
 This file runs a very rudimentary training and prediction with `randomForest`. 
 Simple feature reduction with column sums greater than a designated number is used, drastically reducing our feature set.
 
 ------------
 
-#### Step3_predicting_drugs.R
+## Step3_predicting_drugs.R
 
 We use this to generate an adverse drug scoring system. 
 
@@ -33,6 +33,6 @@ Ones with higest score we expect to have highest likelihood of being implicated 
 
 ------------
 
-#### Step4_Plot_playground.R
+## Step4_Plot_playground.R
 
 This is an experimental file, used to generate exploratory heatmaps and network visualizations. 
