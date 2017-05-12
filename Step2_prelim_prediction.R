@@ -30,14 +30,14 @@ get_minimum_colSum_cols<-function(df,min){
 col_to_keep<-get_minimum_colSum_cols(all_tcrd_reduced,100)
 temp<-all_tcrd_reduced[,col_to_keep]
 ######################################################
-# exclude certain features for Experimentation
+# exclude certain features from tables for Experimentation
 # ######################################################
 # temp<-temp[,!grepl("expression",colnames(temp))]
 
 temp$target_id<-unlist(all_tcrd_reduced_target_id)
 write.csv(temp,"audit.csv")
 ######################################################
-# Merge our 
+# Merge our gold standards list
 ######################################################
 temp<-merge(temp,all_gold[,c('id','tdl','idgfam','y')],by.x='target_id',by.y='id')
 ######################################################

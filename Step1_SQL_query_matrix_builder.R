@@ -3,6 +3,9 @@ library(dplyr)
 
 mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
 
+all_gold<-read.csv('toxic_targets/GoldStandards.csv')
+
+
 # Get all kinase ids
 dbSendQuery(mydb,
             'CREATE TEMPORARY TABLE kinases (id int) as (SELECT id from target where idgfam="Kinase");')
@@ -150,6 +153,8 @@ query_all<-function(kinase_ids){
     # print(all_variables)
     print(length(all_variables))
     print(id)
+    # Each row is added after transforming the combined feature list of existing
+    # data frame and checks if new features are listed in the new dataset.
     row<-data.frame(as.list(setNames(c(ifelse(all_variables %in% data$result,1,0)),
                                      all_variables)))
     # print(row)
@@ -285,13 +290,17 @@ null_751_763<-query_all(null_ids[751:763])
 
 null_results<-bind_rows(null_1_30,null_31_60)
 null_results<-bind_rows(null_results,null_61_90)
+null_results<-bind_rows(null_results,null_91_120)
 null_results<-bind_rows(null_results,null_121_150)
 null_results<-bind_rows(null_results,null_151_180)
 null_results<-bind_rows(null_results,null_181_210)
+null_results<-bind_rows(null_results,null_211_240)
+null_results<-bind_rows(null_results,null_241_270)
 null_results<-bind_rows(null_results,null_271_300)
 null_results<-bind_rows(null_results,null_301_330)
 null_results<-bind_rows(null_results,null_331_360)
 null_results<-bind_rows(null_results,null_361_390)
+null_results<-bind_rows(null_results,null_391_420)
 null_results<-bind_rows(null_results,null_421_450)
 null_results<-bind_rows(null_results,null_451_480)
 null_results<-bind_rows(null_results,null_481_510)
@@ -305,46 +314,16 @@ null_results<-bind_rows(null_results,null_691_720)
 null_results<-bind_rows(null_results,null_721_750)
 null_results<-bind_rows(null_results,null_751_763)
 
-null_results<-bind_rows(null_results,null_241_270)
-null_results<-bind_rows(null_results,null_391_420)
-null_results<-bind_rows(null_results,null_91_120)
-null_results<-bind_rows(null_results,null_211_240)
-
-nr_1_28<-query_all(null_ids[1:28])
+nr_1_28<-query_all(nr_ids[1:28])
 nr_results<-nr_1_28
 
 ######################################################
 # Add appropriate Labels for each class,
-# in the right order.
+# in the right order of the queries 
 ######################################################
 
-null_results$target_id<-unlist(c(null_ids[1:30],null_ids[31:60],null_ids[61:90],
-                                 null_ids[121:150],null_ids[151:180],null_ids[181:210],
-                                 null_ids[271:300],null_ids[301:330],null_ids[331:360],
-                                 null_ids[361:390],null_ids[421:450],null_ids[451:480],
-                                 null_ids[481:510],null_ids[511:540],null_ids[541:570],
-                                 null_ids[571:600],null_ids[601:630],null_ids[631:660],
-                                 null_ids[661:690],null_ids[691:720],null_ids[721:750],
-                                 null_ids[751:763],
-                                 null_ids[241:270],
-                                 null_ids[391:420],
-                                 null_ids[91:120],
-                                 null_ids[211:240]
-))
-
-null_results$tdl<-unlist(c(null_tdl_labels$tdl[1:30],null_tdl_labels$tdl[31:60],null_tdl_labels$tdl[61:90],
-                           null_tdl_labels$tdl[121:150],null_tdl_labels$tdl[151:180],null_tdl_labels$tdl[181:210],
-                           null_tdl_labels$tdl[271:300],null_tdl_labels$tdl[301:330],null_tdl_labels$tdl[331:360],
-                           null_tdl_labels$tdl[361:390],null_tdl_labels$tdl[421:450],null_tdl_labels$tdl[451:480],
-                           null_tdl_labels$tdl[481:510],null_tdl_labels$tdl[511:540],null_tdl_labels$tdl[541:570],
-                           null_tdl_labels$tdl[571:600],null_tdl_labels$tdl[601:630],null_tdl_labels$tdl[631:660],
-                           null_tdl_labels$tdl[661:690],null_tdl_labels$tdl[691:720],null_tdl_labels$tdl[721:750],
-                           null_tdl_labels$tdl[751:763],
-                           null_tdl_labels$tdl[241:270],
-                           null_tdl_labels$tdl[391:420],
-                           null_tdl_labels$tdl[91:120],
-                           null_tdl_labels$tdl[211:240]
-))
+null_results$target_id<-unlist(null_ids)
+null_results$tdl<-unlist(null_tdl_labels$tdl)
 
 nr_results$target_id<-unlist(nr_ids)
 nr_results$tdl<-unlist(nr_tdl_labels$tdl)
@@ -384,6 +363,8 @@ gcpr_results$tdl<-unlist(c(GPCR_tdl_labels$tdl[31:60],
                            GPCR_tdl_labels$tdl[271:300],
                            GPCR_tdl_labels$tdl[1:30]
 ))
+nr_results$target_id<-nr_ids
+nr_results$tdl<-unlist(nr_tdl_labels$tdl)
 
 IC_results$target_id<-unlist(IC_ids)
 IC_results$tdl<-unlist(IC_tdl_labels)
@@ -394,7 +375,6 @@ IC_results$tdl<-unlist(IC_tdl_labels)
 Rprof ( tf <- "log.log",  memory.profiling = TRUE )
 all_tcrd<-bind_rows(kinase_results,gcpr_results)
 all_tcrd<-bind_rows(all_tcrd,IC_results)
-
 all_tcrd<-bind_rows(all_tcrd,nr_results)
 all_tcrd<-bind_rows(all_tcrd,null_results)
 
@@ -464,7 +444,8 @@ all_gold<-read.csv('toxic_targets/GoldStandards.csv')
 
 
 ######################################################
-# 
+# The caveat to chunking queries based on feature set
+# Size is that the order of GPCR IDs get messed up
 ######################################################
 
 all_tcrd$target_id<-c(kinase_ids,unlist(c(GPCR_ids[31:60],
@@ -484,20 +465,10 @@ all_tcrd$target_id<-c(kinase_ids,unlist(c(GPCR_ids[31:60],
 )),
 IC_ids,
 nr_ids,
-unlist(c(null_ids[1:30],null_ids[31:60],null_ids[61:90],
-         null_ids[121:150],null_ids[151:180],null_ids[181:210],
-         null_ids[271:300],null_ids[301:330],null_ids[331:360],
-         null_ids[361:390],null_ids[421:450],null_ids[451:480],
-         null_ids[481:510],null_ids[511:540],null_ids[541:570],
-         null_ids[571:600],null_ids[601:630],null_ids[631:660],
-         null_ids[661:690],null_ids[691:720],null_ids[721:750],
-         null_ids[751:763],
-         null_ids[241:270],
-         null_ids[391:420],
-         null_ids[91:120],
-         null_ids[211:240])))
+null_ids)
 
 all_tcrd_reduced<-all_tcrd[,-c(which(colnames(all_tcrd)=="tdl"))]
-# Select for training
+# Select for training sets, based on our manually minined gold standard list
+# 
 all_tcrd_reduced<-all_tcrd_reduced[all_tcrd_reduced$target_id %in% all_gold$id,]
 all_tcrd_reduced_target_id<-unlist(all_tcrd_reduced$target_id)
