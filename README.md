@@ -32,16 +32,12 @@ The file contains the modeling code for Support Vector Machine (Linear and Kerne
 
 ------------
 
-## Step4_predicting_drugs.R
+## Step4_Future work (biologicall validating the predicted targets)
 
-We use this to generate an adverse drug scoring system. 
-
-We query the entire TCRD database for drugs associated with targets (among the 2117 we predicted) predicted by our algorithm. We obtain a score using `# of Predicted Adverse Targets` - `# of Predicted non-Adverse targets`. 
+### predicting_drugs.R
+This code can be used to generate an adverse drug scoring system.  We query the entire TCRD database for drugs associated with targets (among the 2117 we predicted) predicted by our algorithm. We obtain a score using `# of Predicted Adverse Targets` - `# of Predicted non-Adverse targets`. 
 
 Ones with higest score we expect to have highest likelihood of being implicated with an adverse drug effect. 
 
-------------
-
-## Step5_Plot_playground.R
-
+### Plot_playground.R
 This is an experimental file, used to generate exploratory heatmaps and network visualizations. 
