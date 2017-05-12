@@ -2,7 +2,7 @@
 
 *Jing Ai* and *Jung Hoon Son*
 
-**Utilizing TCRD database (used by Pharos) to predict drug targets associated with poor safety profiles of drugs. **
+**Utilizing TCRD database (used by Pharos) to predict drug targets associated with adverse drug events. **
 
 ## Code Description:
 
@@ -10,20 +10,29 @@
 
 ## Step1_SQL_query_matrix_builder.R 
 
-This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. 
-
-It expands the feature set with each new target vector representation added. It likely needs optimization, but for our purposes we ran it rarely. 
+This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. It expands the feature set with each new target vector representation added. 
 
 ------------
 
-## Step2_prelim_prediction.R
+## Step2: Feature selection 
+# DataMappingColsums.R
+The file contains code for feature reduction. Since a large number of features contained zeros, we first removed the columns with less than 20 non-zero values (out of 1129 samples). 
 
-This file runs a very rudimentary training and prediction with `randomForest`. 
-Simple feature reduction with column sums greater than a designated number is used, drastically reducing our feature set.
+# FeatureSelection.ipynb
+This file contains code for feature selection codes (in python). 
+We applied chi-square feature selection and filered out features with chi-square p-values of <0.05
 
 ------------
 
-## Step3_predicting_drugs.R
+## Step3 Predictive modeling of drug targets
+# Combined_analysis.R
+The files contains the modeling codes for L1-Logistic Regression (5-fold CV), Naive Bayes, Random Forrest based on cross validation.  
+# SVM.R
+The file contains the modeling code for Support Vector Machine (Linear and Kernel). 
+
+------------
+
+## Step4_predicting_drugs.R
 
 We use this to generate an adverse drug scoring system. 
 
@@ -33,6 +42,6 @@ Ones with higest score we expect to have highest likelihood of being implicated 
 
 ------------
 
-## Step4_Plot_playground.R
+## Step5_Plot_playground.R
 
 This is an experimental file, used to generate exploratory heatmaps and network visualizations. 
