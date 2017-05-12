@@ -37,6 +37,35 @@ GPCR_tdl_labels_query<-dbSendQuery(mydb,
 
 GPCR_tdl_labels = fetch(GPCR_tdl_labels_query, n=-1)
 
+# Get all idfgam=NULL ids
+dbSendQuery(mydb,
+            'CREATE TEMPORARY TABLE null_idg (id int) as (SELECT id from target where idgfam IS NULL);')
+null_ids<-dbSendQuery(mydb,'SELECT id from target where idgfam IS NULL;')
+null_ids<-fetch(null_ids, n=-1)
+null_ids<-null_ids$id
+# for the sake of querying. get only gold standard IDS for null
+null_ids<-null_ids[null_ids %in% all_gold$id]
+null_tdl_labels_query<-dbSendQuery(mydb,
+                                   'SELECT id,tdl from target where id IN (select id from null_idg);')
+
+null_tdl_labels = fetch(null_tdl_labels_query, n=-1)
+null_tdl_labels<-null_tdl_labels %>% filter(id %in% null_ids)
+
+# Get all idfgam=NULL ids
+dbSendQuery(mydb,
+            'CREATE TEMPORARY TABLE nr (id int) as (SELECT id from target where idgfam ="NR");')
+nr_ids<-dbSendQuery(mydb,'SELECT id from target where idgfam ="NR";')
+nr_ids<-fetch(nr_ids, n=-1)
+nr_ids<-nr_ids$id
+
+# for the sake of querying. get only gold standard IDS for NR
+nr_ids<-nr_ids[nr_ids %in% all_gold$id]
+nr_tdl_labels_query<-dbSendQuery(mydb,
+                                   'SELECT id,tdl from target where id IN (select id from nr);')
+
+nr_tdl_labels = fetch(nr_tdl_labels_query, n=-1)
+nr_tdl_labels<-nr_tdl_labels %>% filter(id %in% nr_ids)
+
 
 result<-data.frame()
 ## This function queries our database
@@ -129,12 +158,6 @@ query_all<-function(kinase_ids){
   }
   return(result)
 }
-debug<-query_all(kinase_ids[1])
-
-debug2<-query_all(kinase_ids[2])
-
-names(debug)
-
 final_result1_30<-query_all(kinase_ids[1:30])
 final_result31_60<-query_all(kinase_ids[31:60])
 final_result61_90<-query_all(kinase_ids[61:90])
@@ -207,7 +230,6 @@ gcpr_results<-bind_rows(gcpr_results,gcpr_271_300)
 gcpr_results<-bind_rows(gcpr_results,gcpr_1_30)
 
 
-
 IC_1_30<-query_all(IC_ids[1:30])
 IC_31_60<-query_all(IC_ids[31:60])
 IC_61_90<-query_all(IC_ids[61:90])
@@ -233,15 +255,135 @@ IC_results<-bind_rows(IC_results,IC_271_300)
 IC_results<-bind_rows(IC_results,IC_301_330)
 IC_results<-bind_rows(IC_results,IC_331_342)
 
+
+null_1_30<-query_all(null_ids[1:30])
+null_31_60<-query_all(null_ids[31:60])
+null_61_90<-query_all(null_ids[61:90])
+null_91_120<-query_all(null_ids[91:120])
+null_121_150<-query_all(null_ids[121:150])
+null_151_180<-query_all(null_ids[151:180])
+null_181_210<-query_all(null_ids[181:210])
+null_211_240<-query_all(null_ids[211:240])
+null_241_270<-query_all(null_ids[241:270])
+null_271_300<-query_all(null_ids[271:300])
+null_301_330<-query_all(null_ids[301:330])
+null_331_360<-query_all(null_ids[331:360])
+null_361_390<-query_all(null_ids[361:390])
+null_391_420<-query_all(null_ids[391:420])
+null_421_450<-query_all(null_ids[421:450])
+null_451_480<-query_all(null_ids[451:480])
+null_481_510<-query_all(null_ids[481:510])
+null_511_540<-query_all(null_ids[511:540])
+null_541_570<-query_all(null_ids[541:570])
+null_571_600<-query_all(null_ids[571:600])
+null_601_630<-query_all(null_ids[601:630])
+null_631_660<-query_all(null_ids[631:660])
+null_661_690<-query_all(null_ids[661:690])
+null_691_720<-query_all(null_ids[691:720])
+null_721_750<-query_all(null_ids[721:750])
+null_751_763<-query_all(null_ids[751:763])
+
+null_results<-bind_rows(null_1_30,null_31_60)
+null_results<-bind_rows(null_results,null_61_90)
+null_results<-bind_rows(null_results,null_121_150)
+null_results<-bind_rows(null_results,null_151_180)
+null_results<-bind_rows(null_results,null_181_210)
+null_results<-bind_rows(null_results,null_271_300)
+null_results<-bind_rows(null_results,null_301_330)
+null_results<-bind_rows(null_results,null_331_360)
+null_results<-bind_rows(null_results,null_361_390)
+null_results<-bind_rows(null_results,null_421_450)
+null_results<-bind_rows(null_results,null_451_480)
+null_results<-bind_rows(null_results,null_481_510)
+null_results<-bind_rows(null_results,null_511_540)
+null_results<-bind_rows(null_results,null_541_570)
+null_results<-bind_rows(null_results,null_571_600)
+null_results<-bind_rows(null_results,null_601_630)
+null_results<-bind_rows(null_results,null_631_660)
+null_results<-bind_rows(null_results,null_661_690)
+null_results<-bind_rows(null_results,null_691_720)
+null_results<-bind_rows(null_results,null_721_750)
+null_results<-bind_rows(null_results,null_751_763)
+
+null_results<-bind_rows(null_results,null_241_270)
+null_results<-bind_rows(null_results,null_391_420)
+null_results<-bind_rows(null_results,null_91_120)
+null_results<-bind_rows(null_results,null_211_240)
+
+nr_1_28<-query_all(null_ids[1:28])
+nr_results<-nr_1_28
+
 ######################################################
-# Add appropriate Labels for each class
+# Add appropriate Labels for each class,
+# in the right order.
 ######################################################
+
+null_results$target_id<-unlist(c(null_ids[1:30],null_ids[31:60],null_ids[61:90],
+                                 null_ids[121:150],null_ids[151:180],null_ids[181:210],
+                                 null_ids[271:300],null_ids[301:330],null_ids[331:360],
+                                 null_ids[361:390],null_ids[421:450],null_ids[451:480],
+                                 null_ids[481:510],null_ids[511:540],null_ids[541:570],
+                                 null_ids[571:600],null_ids[601:630],null_ids[631:660],
+                                 null_ids[661:690],null_ids[691:720],null_ids[721:750],
+                                 null_ids[751:763],
+                                 null_ids[241:270],
+                                 null_ids[391:420],
+                                 null_ids[91:120],
+                                 null_ids[211:240]
+))
+
+null_results$tdl<-unlist(c(null_tdl_labels$tdl[1:30],null_tdl_labels$tdl[31:60],null_tdl_labels$tdl[61:90],
+                           null_tdl_labels$tdl[121:150],null_tdl_labels$tdl[151:180],null_tdl_labels$tdl[181:210],
+                           null_tdl_labels$tdl[271:300],null_tdl_labels$tdl[301:330],null_tdl_labels$tdl[331:360],
+                           null_tdl_labels$tdl[361:390],null_tdl_labels$tdl[421:450],null_tdl_labels$tdl[451:480],
+                           null_tdl_labels$tdl[481:510],null_tdl_labels$tdl[511:540],null_tdl_labels$tdl[541:570],
+                           null_tdl_labels$tdl[571:600],null_tdl_labels$tdl[601:630],null_tdl_labels$tdl[631:660],
+                           null_tdl_labels$tdl[661:690],null_tdl_labels$tdl[691:720],null_tdl_labels$tdl[721:750],
+                           null_tdl_labels$tdl[751:763],
+                           null_tdl_labels$tdl[241:270],
+                           null_tdl_labels$tdl[391:420],
+                           null_tdl_labels$tdl[91:120],
+                           null_tdl_labels$tdl[211:240]
+))
+
+nr_results$target_id<-unlist(nr_ids)
+nr_results$tdl<-unlist(nr_tdl_labels$tdl)
 
 kinase_results$target_id<-unlist(kinase_ids)
 kinase_results$tdl<-unlist(kinase_tdl_labels)
 
-gcpr_results$target_id<-unlist(GPCR_ids)
-gcpr_results$tdl<-unlist(GPCR_tdl_labels)
+# caveat for above optimization for bind_rows 
+# is that it messed up the original ID order.
+gcpr_results$target_id<-unlist(c(GPCR_ids[31:60],
+                                 GPCR_ids[61:90],
+                                 GPCR_ids[121:150],
+                                 GPCR_ids[151:180],
+                                 GPCR_ids[181:210],
+                                 GPCR_ids[211:240],
+                                 GPCR_ids[241:270],
+                                 GPCR_ids[301:330],
+                                 GPCR_ids[331:360],
+                                 GPCR_ids[361:390],
+                                 GPCR_ids[391:406],
+                                 GPCR_ids[91:120],
+                                 GPCR_ids[271:300],
+                                 GPCR_ids[1:30]
+))
+gcpr_results$tdl<-unlist(c(GPCR_tdl_labels$tdl[31:60],
+                           GPCR_tdl_labels$tdl[61:90],
+                           GPCR_tdl_labels$tdl[121:150],
+                           GPCR_tdl_labels$tdl[151:180],
+                           GPCR_tdl_labels$tdl[181:210],
+                           GPCR_tdl_labels$tdl[211:240],
+                           GPCR_tdl_labels$tdl[241:270],
+                           GPCR_tdl_labels$tdl[301:330],
+                           GPCR_tdl_labels$tdl[331:360],
+                           GPCR_tdl_labels$tdl[361:390],
+                           GPCR_tdl_labels$tdl[391:406],
+                           GPCR_tdl_labels$tdl[91:120],
+                           GPCR_tdl_labels$tdl[271:300],
+                           GPCR_tdl_labels$tdl[1:30]
+))
 
 IC_results$target_id<-unlist(IC_ids)
 IC_results$tdl<-unlist(IC_tdl_labels)
@@ -252,31 +394,110 @@ IC_results$tdl<-unlist(IC_tdl_labels)
 Rprof ( tf <- "log.log",  memory.profiling = TRUE )
 all_tcrd<-bind_rows(kinase_results,gcpr_results)
 all_tcrd<-bind_rows(all_tcrd,IC_results)
+
+all_tcrd<-bind_rows(all_tcrd,nr_results)
+all_tcrd<-bind_rows(all_tcrd,null_results)
+
 Rprof ( NULL ) ; print ( summaryRprof ( tf )  )
+
+
 ######################################################
 # Zero all NA values. 
 # Because we are checking for 'presence' of an association
 # and not obtaining any quantitative values, we felt that
 # 0ing the features not listed was a safe assumption.
 ######################################################
+Rprof ( tf <- "log.log",  memory.profiling = TRUE )
 
-all_tcrd[is.na(all_tcrd)]<-0
+all_tcrd_1_300<-all_tcrd[1:300,]
+all_tcrd_301_600<-all_tcrd[301:600,]
+all_tcrd_601_900<-all_tcrd[601:900,]
+all_tcrd_901_1200<-all_tcrd[901:1200,]
+all_tcrd_1201_1500<-all_tcrd[1201:1500,]
+all_tcrd_1501_1800<-all_tcrd[1501:1800,]
+all_tcrd_1801_2000<-all_tcrd[1801:2000,]
+all_tcrd_2001_2117<-all_tcrd[2001:2117,]
+
+zeroer<-function(df){
+  mat<-data.matrix(df)
+  mat[is.na(mat)]<-0
+  df<-data.frame(mat)
+  return(df)
+}
+
+all_tcrd_1_300<-zeroer(all_tcrd_1_300)
+all_tcrd_301_600<-zeroer(all_tcrd_301_600)
+all_tcrd_601_900<-zeroer(all_tcrd_601_900)
+all_tcrd_901_1200<-zeroer(all_tcrd_901_1200)
+all_tcrd_1201_1500<-zeroer(all_tcrd_1201_1500)
+all_tcrd_1501_1800<-zeroer(all_tcrd_1501_1800)
+all_tcrd_1801_2000<-zeroer(all_tcrd_1801_2000)
+all_tcrd_2001_2117<-zeroer(all_tcrd_2001_2117)
+
+all_tdl_class<-all_tcrd$tdl
+
+all_tcrd_zeroed<-rbind(all_tcrd_1_300,all_tcrd_301_600)
+all_tcrd_zeroed<-rbind(all_tcrd_zeroed,all_tcrd_601_900)
+all_tcrd_zeroed<-rbind(all_tcrd_zeroed,all_tcrd_901_1200)
+all_tcrd_zeroed<-rbind(all_tcrd_zeroed,all_tcrd_1201_1500)
+all_tcrd_zeroed<-rbind(all_tcrd_zeroed,all_tcrd_1501_1800)
+all_tcrd_zeroed<-rbind(all_tcrd_zeroed,all_tcrd_1801_2000)
+all_tcrd_zeroed<-rbind(all_tcrd_zeroed,all_tcrd_2001_2117)
+
+all_tcrd<-all_tcrd_zeroed
+rm(all_tcrd_zeroed)
+
+Rprof ( NULL ) ; print ( summaryRprof ( tf )  )
 
 ######################################################
 # Combine all the gold standards, extracted from
 # WITHDARWN database.
 ######################################################
-gold_GPCR<-read.csv('toxic_targets/Gold_GPCR.csv')
-gold_Kinase<-read.csv('toxic_targets/gold_Kinase.csv')
-gold_IC<-read.csv('toxic_targets/gold_IC.csv')
-all_gold<-bind_rows(gold_IC,gold_GPCR)
+# gold_GPCR<-read.csv('toxic_targets/Gold_GPCR.csv')
+# gold_Kinase<-read.csv('toxic_targets/gold_Kinase.csv')
+# gold_IC<-read.csv('toxic_targets/gold_IC.csv')
+
+all_gold<-read.csv('toxic_targets/GoldStandards.csv')
+# all_gold<-bind_rows(gold_IC,gold_GPCR)
 # Kinase csv has an extra row
-all_gold<-bind_rows(all_gold,gold_Kinase[,c(-1)])
+# all_gold<-bind_rows(all_gold,gold_Kinase[,c(-1)])
 
 
 ######################################################
 # 
 ######################################################
+
+all_tcrd$target_id<-c(kinase_ids,unlist(c(GPCR_ids[31:60],
+                                          GPCR_ids[61:90],
+                                          GPCR_ids[121:150],
+                                          GPCR_ids[181:210],
+                                          GPCR_ids[211:240],
+                                          GPCR_ids[241:270],
+                                          GPCR_ids[271:300],
+                                          GPCR_ids[301:330],
+                                          GPCR_ids[331:360],
+                                          GPCR_ids[361:390],
+                                          GPCR_ids[391:406],
+                                          GPCR_ids[91:120],
+                                          GPCR_ids[271:300],
+                                          GPCR_ids[1:30]
+)),
+IC_ids,
+nr_ids,
+unlist(c(null_ids[1:30],null_ids[31:60],null_ids[61:90],
+         null_ids[121:150],null_ids[151:180],null_ids[181:210],
+         null_ids[271:300],null_ids[301:330],null_ids[331:360],
+         null_ids[361:390],null_ids[421:450],null_ids[451:480],
+         null_ids[481:510],null_ids[511:540],null_ids[541:570],
+         null_ids[571:600],null_ids[601:630],null_ids[631:660],
+         null_ids[661:690],null_ids[691:720],null_ids[721:750],
+         null_ids[751:763],
+         null_ids[241:270],
+         null_ids[391:420],
+         null_ids[91:120],
+         null_ids[211:240])))
+
 all_tcrd_reduced<-all_tcrd[,-c(which(colnames(all_tcrd)=="tdl"))]
 # Select for training
-all_tcrd_reduced<-all_tcrd_reduced %>% filter(target_id %in% all_gold$id)
+all_tcrd_reduced<-all_tcrd_reduced[all_tcrd_reduced$target_id %in% all_gold$id,]
+all_tcrd_reduced_target_id<-unlist(all_tcrd_reduced$target_id)

@@ -4,13 +4,11 @@ library(randomForest)
 library(caret)
 library(RMySQL)
 library(dplyr)
-
-temp_predict_all<-predict(model,bah)
+data_viz_df<-all_tcrd
+temp_predict_all<-predict(model,data_viz_df)
 
 target_adverse<-data.frame(target_id=all_tcrd$target_id,
              adverse=unlist(temp_predict_all))
-
-
 
 # Get positive from drug_activity in PHAROS
 mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
