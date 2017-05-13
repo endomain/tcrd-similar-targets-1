@@ -76,7 +76,7 @@ This is an experimental file, used to generate exploratory heatmaps and network 
 
 ##### `results/`
 
-This folder contains our results and model evaluations.
+This folder contains our results and model performance and evaluations. Important feature lists are contained within this folder.
 
 -----------
 
