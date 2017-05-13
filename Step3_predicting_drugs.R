@@ -5,6 +5,7 @@ library(caret)
 library(RMySQL)
 library(dplyr)
 data_viz_df<-all_tcrd
+data_viz_df$idgfam<-0
 temp_predict_all<-predict(model,data_viz_df)
 
 target_adverse<-data.frame(target_id=all_tcrd$target_id,
@@ -76,9 +77,9 @@ drug_pred_counts[is.na(drug_pred_counts)]<-0
 
 drug_pred_counts<-drug_pred_counts %>% 
   mutate(score=(n-n_minus))
-
-# Apply it on our CT AE drug counts
-ct_ae_drug_counts<-merge(ct_ae_drug_counts, drug_pred_counts, by = "drug", all.x = TRUE)
-ct_ae_drug_counts %>% 
-  na.omit() %>%
-  arrange(desc(diff))
+# 
+# # Apply it on our CT AE drug counts
+# ct_ae_drug_counts<-merge(ct_ae_drug_counts, drug_pred_counts, by = "drug", all.x = TRUE)
+# ct_ae_drug_counts %>% 
+#   na.omit() %>%
+#   arrange(desc(diff))
