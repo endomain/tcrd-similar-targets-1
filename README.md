@@ -1,8 +1,10 @@
 # tcrd-similar-targets
 
 *Jing Ai* and *Jung Hoon Son*
-BINF G4002 Computation Methods
-Final Project
+
+__BINF G4002 Computation Methods__
+
+__Final Project__
 
 **Utilizing TCRD database (used by Pharos) to predict drug targets associated with adverse drug events. **
 
@@ -20,13 +22,15 @@ Individual IDG family based data sets (GPCR, Ion channels, Kinases, NRs, null-cl
 
 ## Code Description:
 
+------
+
 ### Step1: SQL Query, Vector represention of targets, and Working Matrix
 
 ##### `Step1_SQL_query_matrix_builder.R`
 
 This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. It expands the feature set with each new target vector representation added. 
 
-
+------
 
 ### Step2: Feature selection 
 ##### `analysis_code/DataMappingColsums.R`
@@ -38,7 +42,7 @@ We applied chi-square feature selection and filered out features with chi-square
 
 `Step2_prelim_prediction.R` is used for preliminary `randomForest` model in R, for quickly testing our test sets.
 
-
+------
 
 ### Step 3: Predictive modeling of drug targets
 ##### `analysis_code/combined_analysis_JA.R`
@@ -46,7 +50,7 @@ The files contains the modeling codes for L1-Logistic Regression (5-fold CV), Na
 ##### `analysis_code/SVM_JA.R`
 The file contains the modeling code for Support Vector Machine (Linear and Kernel). 
 
-
+------
 
 ### Step 4: Future work (biologically validating the predicted targets)
 
@@ -65,6 +69,10 @@ This is an experimental file, used to generate exploratory heatmaps and network 
 ## Miscellaneous Relevant Files:
 
 ##### `toxic_targets/GoldStandards.csv`
-This file contains curated information from WITHDRAWN database, implicating drug targets associated with withdrawn drugs around the world.
+This file contains curated information from WITHDRAWN database, implicating drug targets associated with withdrawn drugs around the world. This serves as our gold standard labels for denoting which targets have been implicated with drug adverse events.
+
+##### `toxic_targets/GoldStandards.csv`
+
+-----------
 
 
