@@ -70,6 +70,8 @@ This is an experimental file, used to generate exploratory heatmaps and network 
 
 `correlation_network.pdf` is a visualization of correlation matrix of the features. Uninformative, but shows potential.
 
+![](futurework/heatmap_network.png?raw=true)
+
 -----------
 
 ## Results:
