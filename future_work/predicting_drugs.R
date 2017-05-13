@@ -14,7 +14,7 @@ target_adverse<-data.frame(target_id=all_tcrd$target_id,
 # Get positive from drug_activity in PHAROS
 mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
 qry<-paste("SELECT drug,count(drug) AS n from drug_activity 
-           WHERE target_id IN (",paste(target_adverse[target_adverse$adverse==1,]$target_id, collapse=","),") GROUP BY drug;"  )
+           WHERE target_id IN (",paste(target_adverse[target_adverse$adverse=='-1',]$target_id, collapse=","),") GROUP BY drug;"  )
 drug_pred_counts<-dbSendQuery(mydb,qry)
 drug_pred_counts<-fetch(drug_pred_counts, n=-1)
 drug_pred_counts<-drug_pred_counts%>%
@@ -22,7 +22,7 @@ drug_pred_counts<-drug_pred_counts%>%
 
 # Get negative from drug_activity in PHAROS
 qry2<-paste("SELECT drug,count(drug) AS n_minus from drug_activity 
-           WHERE target_id IN (",paste(target_adverse[target_adverse$adverse==0,]$target_id, collapse=","),") GROUP BY drug;"  )
+           WHERE target_id IN (",paste(target_adverse[target_adverse$adverse=='1',]$target_id, collapse=","),") GROUP BY drug;"  )
 n_minus<-dbSendQuery(mydb,qry2)
 n_minus<-fetch(n_minus, n=-1)
 n_minus<-n_minus%>%
@@ -77,6 +77,9 @@ drug_pred_counts[is.na(drug_pred_counts)]<-0
 
 drug_pred_counts<-drug_pred_counts %>% 
   mutate(score=(n-n_minus))
+
+drug_pred_counts<-drug_pred_counts%>%
+  arrange(desc(score))
 # 
 # # Apply it on our CT AE drug counts
 # ct_ae_drug_counts<-merge(ct_ae_drug_counts, drug_pred_counts, by = "drug", all.x = TRUE)

@@ -9,21 +9,25 @@ idl_idgfam<-read.csv("all_tcrd_tdl_idgfam.csv")
 
 colnames(idl_idgfam)[1]<-"target_id"
 data_viz_df<-cbind(data_viz_df,data.frame(idl_idgfam[match(all_tcrd$target_id, idl_idgfam$target_id),])$idgfam)
-colnames(data_viz_df)[161039]<-'idgfam'
+colnames(data_viz_df)[168282]<-'idgfam'
+data_viz_df<-data_viz_df[,-which(colnames(data_viz_df)=="tdl")]
+
 data_viz_df$predict<-predict(model,data_viz_df)
+data_viz_df<-data_viz_df[,-which(colnames(data_viz_df)=="idgfam")]
+
 
 ######################################################
 
 table(data_viz_df$predict,data_viz_df$tdl)
 table(data_viz_df$predict,data_viz_df$idgfam)
 
-# cols_to_subtract<-c(which(colnames(data_viz_df)=="target_id"),
-#                     which(colnames(data_viz_df)=="tdl"),
-#                     which(colnames(data_viz_df)=="idgfam"),
-#                     which(colnames(data_viz_df)=="predict"))
-# 
-# data_viz_df<-data_viz_df[,-cols_to_subtract]
-data_viz_df<-data_viz_df[,get_colSums(data_viz_df,20)]
+cols_to_subtract<-c(which(colnames(data_viz_df)=="target_id"),
+                    which(colnames(data_viz_df)=="tdl"),
+                    which(colnames(data_viz_df)=="idgfam"),
+                    which(colnames(data_viz_df)=="predict"))
+
+data_viz_df<-data_viz_df[,-cols_to_subtract]
+data_viz_df<-data_viz_df[,get_minimum_colSum_cols(data_viz_df,40)]
 heatmap_mat<-data.matrix(data_viz_df)
 
 
@@ -32,7 +36,7 @@ idgfam_annotation<-data.frame(idgfam=data_viz_df[data_viz_df$target_id == as.num
                               tdl=data_viz_df[data_viz_df$target_id == as.numeric(rownames(heatmap_mat))]$tdl,
                               predict=data_viz_df[data_viz_df$target_id == as.numeric(rownames(heatmap_mat))]$predict)
 
-pdf("heatmap.pdf",width=40,height=70)
+pdf("heatmap.pdf",width=40,height=60)
 
 # ha1 = HeatmapAnnotation(df = df,
 #                         col = list(type = c("a" = "red", "b" = "blue"),
@@ -78,6 +82,6 @@ cor<-cor(heatmap_mat)
 pdf("correlation_network.pdf",width=40,height=50)
 qgraph(cor,graph="cor",
        layout="spring",
-       minimum=0.5,
+       minimum=0.4,
        label.cex=5)
 dev.off()
