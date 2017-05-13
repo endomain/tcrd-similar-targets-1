@@ -14,6 +14,8 @@ Final Project
 
 R workspace file, containing `all_tcrd` data frame for our analysis. This data frame can be generated from `Step1_SQL_query_matrix_builder.R` file on any computer with a local instance of Pharos/TCRD database installed on MySQL. SQL data dump is available from:  (http://juniper.health.unm.edu/tcrd/download/tcrd_v4.4.2.sql.gz)
 
+IDG family based data sets have been compiled and is made available in the folder `individual_class`.
+
 ------------
 
 ## Code Description:
@@ -24,7 +26,7 @@ R workspace file, containing `all_tcrd` data frame for our analysis. This data f
 
 This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. It expands the feature set with each new target vector representation added. 
 
-------------
+
 
 #### Step2: Feature selection 
 ##### `analysis_code/DataMappingColsums.R`
@@ -36,7 +38,7 @@ We applied chi-square feature selection and filered out features with chi-square
 
 `Step2_prelim_prediction.R` is used for preliminary `randomForest` model in R, for quickly testing our test sets.
 
-------------
+
 
 #### Step 3: Predictive modeling of drug targets
 ##### `analysis_code/combined_analysis_JA.R`
@@ -44,14 +46,25 @@ The files contains the modeling codes for L1-Logistic Regression (5-fold CV), Na
 ##### `analysis_code/SVM_JA.R`
 The file contains the modeling code for Support Vector Machine (Linear and Kernel). 
 
-------------
+
 
 #### Step 4: Future work (biologically validating the predicted targets)
 
 ##### `future_work/predicting_drugs.R`
-This code can be used to generate an adverse drug scoring system.  We query the entire TCRD database for drugs associated with targets (among the 2117 we predicted) predicted by our algorithm. We obtain a score using `# of Predicted Adverse Targets` - `# of Predicted non-Adverse targets`. 
+This code can be used to generate an adverse drug scoring system.  We query the entire TCRD database for drugs associated with targets (among the 2117 we predicted) predicted by our algorithm. We obtain a score using 
+
+> Score = `# of Predicted Adverse Targets` - `# of Predicted non-Adverse targets`. 
 
 Ones with higest score we expect to have highest likelihood of being implicated with an adverse drug effect. 
 
 ##### `future_work/Plot_playground.R`
 This is an experimental file, used to generate exploratory heatmaps and network visualizations. 
+
+-----------
+
+## Miscellaneous Relevant Files:
+
+##### `toxic_targets/GoldStandards.csv`
+This file contains curated information from WITHDRAWN database, implicating drug targets associated with withdrawn drugs around the world.
+
+
