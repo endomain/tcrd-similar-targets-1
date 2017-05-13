@@ -66,12 +66,10 @@ This is an experimental file, used to generate exploratory heatmaps and network 
 
 -----------
 
-## Miscellaneous Relevant Files:
+## Other Relevant Files:
 
 ##### `toxic_targets/GoldStandards.csv`
 This file contains curated information from WITHDRAWN database, implicating drug targets associated with withdrawn drugs around the world. This serves as our gold standard labels for denoting which targets have been implicated with drug adverse events.
-
-##### `toxic_targets/GoldStandards.csv`
 
 -----------
 
