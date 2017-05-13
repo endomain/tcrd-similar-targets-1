@@ -1,7 +1,7 @@
 library(RMySQL)
 library(dplyr)
 
-mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
+mydb = dbConnect(MySQL(), user='root', password='SET_PASSWORD', dbname='pharos', host='localhost')
 
 all_gold<-read.csv('toxic_targets/GoldStandards.csv')
 

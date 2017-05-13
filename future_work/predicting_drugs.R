@@ -12,7 +12,7 @@ target_adverse<-data.frame(target_id=all_tcrd$target_id,
              adverse=unlist(temp_predict_all))
 
 # Get positive from drug_activity in PHAROS
-mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
+mydb = dbConnect(MySQL(), user='root', password='SET_PASSWORD', dbname='pharos', host='localhost')
 qry<-paste("SELECT drug,count(drug) AS n from drug_activity 
            WHERE target_id IN (",paste(target_adverse[target_adverse$adverse=='-1',]$target_id, collapse=","),") GROUP BY drug;"  )
 drug_pred_counts<-dbSendQuery(mydb,qry)
@@ -42,7 +42,7 @@ drug_pred_counts<-drug_pred_counts %>%
 
 ##################################
 # Get positive from chembl in PHAROS
-mydb = dbConnect(MySQL(), user='root', password='jhoon11', dbname='pharos', host='localhost')
+mydb = dbConnect(MySQL(), user='root', password='SET_PASSWORD', dbname='pharos', host='localhost')
 qry<-paste("SELECT distinct(drug) FROM drug_activity 
            WHERE target_id IN (",paste(target_adverse[target_adverse$adverse==1,]$target_id, collapse=","),") GROUP BY drug"  )
 qry<-paste("SELECT distinct(target_id) FROM chembl_activity 
