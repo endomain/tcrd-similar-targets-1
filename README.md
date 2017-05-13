@@ -18,7 +18,8 @@ R workspace file, containing `all_tcrd` data frame for our analysis. This data f
 
 Individual IDG family based data sets (GPCR, Ion channels, Kinases, NRs, null-classes) have been compiled and is made available in the folder `individual_class`.
 
-### 
+#### Gold Standards Labels `toxic_targets/GoldStandards.csv`
+This file contains curated information from WITHDRAWN database, implicating drug targets associated with withdrawn drugs around the world (rows where y=0). Together with the protein targets classified as Tclin in TCRD that are not associated with any withdrawn drugs (rows where y=1), they serves as our gold standards for denoting which targets have been implicated with drug adverse events and which have not. 
 
 ------------
 
@@ -31,9 +32,6 @@ Individual IDG family based data sets (GPCR, Ion channels, Kinases, NRs, null-cl
 ##### `Step1_SQL_query_matrix_builder.R`
 
 This code queries each druggable target + additional targets identified via WITHDRAWN database from a local instance of TCRD MySQL database. It expands the feature set with each new target vector representation added. 
-
-##### `toxic_targets/GoldStandards.csv`
-This file contains curated information from WITHDRAWN database, implicating drug targets associated with withdrawn drugs around the world (rows where y=0). Together with the protein targets classified as Tclin in TCRD that are not associated with any withdrawn drugs (rows where y=1), they serves as our gold standards for denoting which targets have been implicated with drug adverse events and which have not.
 
 ------
 
