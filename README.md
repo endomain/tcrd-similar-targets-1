@@ -70,7 +70,7 @@ This is an experimental file, used to generate exploratory heatmaps and network 
 
 `correlation_network.pdf` is a visualization of correlation matrix of the features. Uninformative, but shows potential.
 
-![](futurework/heatmap_network.png?raw=true)
+![](https://raw.githubusercontent.com/plasmak11/tcrd-similar-targets/master/future_work/heatmap_network.png)
 
 -----------
 
