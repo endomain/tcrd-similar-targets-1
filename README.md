@@ -62,11 +62,19 @@ This code can be used to generate an adverse drug scoring system.  We query the 
 In which drugs with higest score we expect to have highest likelihood of being implicated with an adverse drug effect. Current
 
 ##### `future_work/Plot_playground.R`
-This is an experimental file, used to generate exploratory heatmaps and network visualizations. 
+This is an experimental file, used to generate exploratory heatmaps and network visualizations. It currently generates two plots:
 
 `heatmap.pdf` is a demonstration of heatmaps with K-means clustering applied, showing similar targets based on our vector representation.
 
 `correlation_network.pdf` is a visualization of correlation matrix of the features. Uninformative, but shows potential.
+
+-----------
+
+## Results:
+
+##### `results/`
+
+This folder contains our results and model evaluations.
 
 -----------
 
