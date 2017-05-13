@@ -9,36 +9,8 @@ library(glmnet)
 library(pROC)
 library(randomForest)
 
-#############################
-## Loading + Prepping Data
-#############################
-# Check for NA in dataframe
-any(is.na(all_tcrd))
-# Check column names 
-check <- as.data.frame(colnames(all_tcrd))
-# Convert to numeric matrix (if it's not numeric)
-all_tcrd <- data.matrix(all_tcrd)
-
-# Colsums - feature removal
-temp<-all_tcrd[,colSums(all_tcrd) > 10]
-
-# Merge the gold standard columns using IDs
-temp<-merge(temp,all_gold[,c('id','y','tdl','idgfam')],by.x='target_id',by.y='id')
-# Exclude the target_id column for training
-temp<-temp[,c(-1)]
-
-# Adding control variables
-temp$Tclin <- 0
-temp$Tclin[temp$tdl=="Tclin"] <- 1
-temp$Tchem <- 0
-temp$Tchem[temp$tdl=="Tchem"] <- 1
-temp$Tbio <- 0
-temp$Tbio[temp$tdl=="Tbio"] <- 1
-temp$GPCR <- 0
-temp$GPCR[temp$idgfam=="GPCR"] <- 1
-temp$IC <- 0
-temp$IC[temp$idgfam=="IC"] <- 1
-temp <- subset(temp,select=-c(tdl,idgfam))
+# Reading in data from ch2 feature selection
+temp <- read.csv('/Users/ja/Documents/Computational Methods/Project/Model/NewXy_chi2.csv')
 
 # Split the gold standards sample
 set.seed(1)
@@ -80,25 +52,19 @@ nb.roc <-roc(testy,nb.pred)
 ###########################
 # GLMNET
 ###########################
-# Regular lasso
-fit<-glmnet(x,y,alpha=1,family='multinomial')
-ypred <- predict(fit,testx,s=c(0.05),type="class")
-mean(ypred!=testy)
-
-#------------------------------------------------------------------------------------------------
 # CV - Lasso
 fit.cv<-cv.glmnet(x,y,alpha=1,nfolds=5,family='multinomial',type.measure = "class")
   #to plot lambda by fold
-  #pdf(file="CV_Lasso_misclassification_lambda.pdf")
-  #plot(fit.cv)
-  #dev.off()
+  pdf(file="CV_Lasso_misclassification_lambda.pdf")
+  plot(fit.cv)
+  dev.off()
 
 # Get none-zero coefficients 
 coef.cv <- coef(fit.cv)$`1`
 coef.cv <- as.matrix(coef.cv)
 coef.cv <- as.data.frame(coef.cv[coef.cv != 0,])
 colnames(coef.cv) <- 'coefficient'
-write.csv(coef.cv,"L1LogisticRegression_Coefficients2.csv")
+write.csv(coef.cv,"L1LogisticRegression_Coefficients3.csv")
 
 # prediction by 0-1 response 
 ypred.cv <- predict(fit.cv,testx,s="lambda.min",type="class")
@@ -121,7 +87,7 @@ auc(cv.lasso.roc)
 
 # 3) plot individual ROC curve
 #pdf(file="ROC_cvLasso.pdf")
-plot.roc(cv.lasso.roc,xlim=c(1,0),main="ROC curve of Logistic Regression (CV-Lasso)",col="blue")
+#plot.roc(cv.lasso.roc,xlim=c(1,0),main="ROC curve of Logistic Regression (CV-Lasso)",col="blue")
 #legend("topleft",legend=c("AUC=0.7713"))
 #dev.off()
 
@@ -151,7 +117,8 @@ dev.off()
 # Important features for random forest
 important_rf <- as.data.frame(rf_fit$importance[,c(2,3,4)])
 colnames(important_rf) <- c("MeanDecreaseAccuracyClass","MeanDecreaseAccuracy","MeanDecreaseGini")
-important_rf <- important_rf[sort(important_rf$MeanDecreaseAccuracyClass,decreasing = TRUE),]
+important_rf <- important_rf[order(important_rf$MeanDecreaseAccuracyClass,decreasing = TRUE),]
+write.csv(important_rf,'ImportantFeaturesByRF.csv')
 
 #----------------------------------------------------------------------
 #save variables in R data file
@@ -161,11 +128,19 @@ important_rf <- important_rf[sort(important_rf$MeanDecreaseAccuracyClass,decreas
 # Plot combined ROC curve
 # Need to load svm roc results
 
-pdf(file="mergedROC.pdf")
-plot.roc(cv.lasso.roc,xlim=c(1,0),main="ROC curves comparison",col=c(1),xlab="False Positive Rate",ylab="True Positive Rate")
+pdf(file="mergedROC2.pdf")
+plot.roc(cv.lasso.roc,xlim=c(1,0),main="ROC curves comparison",col=c(1))
 lines(nb.roc$sensitivities,nb.roc$specificities,col=c(4))
 lines(rf.roc$sensitivities,rf.roc$specificities,col=c(6))
 lines(svml.roc$sensitivities,svml.roc$specificities,col=c(2))
-lines(svmk.roc$sensitivities,svmk.roc$specificities,col=c(3))
-legend("bottomright",col=c(1,4,6,2,3), lty=1, legend=c("LogisticRegression-L1","Naive Bayes","Random Forest","SVM-linear","SVM-kernel"))
+#lines(svmk.roc$sensitivities,svmk.roc$specificities,col=c(3))
+legend("bottomright",col=c(1,4,6,2), lty=1, legend=c("LogisticRegression-L1","Naive Bayes","Random Forest","SVM-linear"))
 dev.off()
+
+
+#nb.roc
+#cv.lasso.roc
+#rf.auc
+#svml.roc
+
+
