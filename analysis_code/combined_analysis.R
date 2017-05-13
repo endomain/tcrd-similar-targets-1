@@ -122,7 +122,7 @@ write.csv(important_rf,'ImportantFeaturesByRF.csv')
 
 #----------------------------------------------------------------------
 #save variables in R data file
-#save(x,y,testx,testy,file='GPCR_IC.Rdata')
+#save(x,y,testx,testy,file='Variables.Rdata')
 
 #----------------------------------------------------------------------
 # Plot combined ROC curve
